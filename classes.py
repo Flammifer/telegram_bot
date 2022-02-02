@@ -185,8 +185,8 @@ class Creature:
         self.hp = hp
         return self
     def get_name(self, player):
-        txt.get(player, self.name)
-
+        return txt.get(player, self.name)
+        
     def get_weapon(self):
         if self.weapon_id == 0: return None
         weapon = Weapon.get(id=self.weapon_id)
@@ -250,13 +250,13 @@ class Hero(hdb.Entity):
         self.common_enhancements = 0
         self.uncommon_enhancements = 0
         self.rare_enhancements = 0
-        
-        
+
         self.player = player.id
         self.flush()
     def to_creature(self):
-        self.creature = Creature( self.name, self.max_hp, self.hp, self.level, Attributes().read_array([self.strength, self.agility, self.intelligence]), self.weapon_id, self.player )
-        return self.creature
+        print('now my hp is '+str(self.hp))
+        return Creature( self.name, self.max_hp, self.hp, self.level, Attributes().read_array([self.strength, self.agility, self.intelligence]), self.weapon_id, self.player )
+         
     def get_enhancements(self):
         return self.common_enhancements+self.uncommon_enhancements+self.rare_enhancements
 
@@ -601,10 +601,11 @@ class Stage:
         self.encounter.start_stage(utilities, self.next_stage, player)
     def battle_round(self, utilities, player):
         if self.enemy == None: return
-        hero = player.get_hero().to_creature()  
+        hero = player.get_hero().to_creature()
+        hero.refresh(player.get_hero().hp)       
         enemy = self.enemy.refresh(player.get_hero().enemy_hp)
-        print('round started')
         hero_damage, enemy_alive = hero.hit(enemy)
+
         if enemy_alive:
             enemy_damage, hero_alive = enemy.hit(hero)
             player.get_hero().enemy_hp = enemy.hp

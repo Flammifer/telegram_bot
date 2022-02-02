@@ -21,7 +21,7 @@ tq_e1_s0 = Stage(StageSpec.descriptive, 0, 1, w_precept = w_tq_e1_s0, b_precept 
 #грабитель в ратуше
 robber = Creature('creature_robber',
                   6, 6, 1,
-                  Attributes(1,2,0),
+                  Attributes(4,2,0),
                   0, 0)
 def w_tq_e1_s1(stage : Stage,utilities : Utilities, player : Player, args = [] ):
     print('welcome')

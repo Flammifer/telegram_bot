@@ -155,7 +155,8 @@ def b_create_hero(utilities, player, args):
             player.send_message(utilities,  'hero_bought', formatparams = [hero.name])
             return Precept_return(0, 'town')
     return Precept_return(0, None)
-
+    if butpressed == button_cancel:
+        return Precept_return(0, 'town')
 s_create_hero = State('create_hero', 
                       welcome_precept = w_create_hero, 
                       body_precept = b_create_hero, 
