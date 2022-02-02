@@ -1,0 +1,80 @@
+from classes import *
+from languages import *
+from Bot import MyBot
+
+
+button_next = Button('next')
+m_tq_eq_s0 = Markup([[button_next]])
+
+def w_tq_e1_s0(stage : Stage, utilities, player : Player, args = []):
+    player.postpone_message(utilities, 'tq_e1_s0_w_text', [player.get_hero().name, player.get_hero().name], markup = m_tq_eq_s0)
+
+   
+def b_tq_e1_s0(stage : Stage, utilities, player : Player, args = []):
+    buttpressed = stage.markup.find_button(player, args[0])
+    if buttpressed == button_next:
+        stage.finish(utilities, player)
+tq_e1_s0 = Stage(StageSpec.descriptive, 0, 1, w_precept = w_tq_e1_s0, b_precept = b_tq_e1_s0, markup = m_tq_eq_s0)
+
+
+#----------------------------------------------------------------------------------------------------
+#грабитель в ратуше
+robber = Creature('creature_robber',
+                  6, 6, 1,
+                  Attributes(4,2,0),
+                  0, 0)
+def w_tq_e1_s1(stage : Stage,utilities : Utilities, player : Player, args = [] ):
+    player.postpone_message(utilities, 'tq_e1_s1_w_text', markup = m_tq_eq_s1)
+    player.get_hero().enemy_hp = stage.enemy.hp
+
+def b_tq_e1_s1(stage : Stage, utilities : Utilities, player : Player, args = [] ):
+    buttpressed = stage.markup.find_button(player, args[0])
+    if buttpressed == button_start_battle:
+        stage.battle_round(utilities, player)
+
+button_start_battle = Button('start_battle')
+m_tq_eq_s1 = Markup([[button_start_battle]])
+
+tq_e1_s1 = Stage(StageSpec.battle, 1, 2, 
+                 w_precept = w_tq_e1_s1, 
+                 b_precept = b_tq_e1_s1, 
+                 markup = m_tq_eq_s1, enemy = robber)
+
+#----------------------------------------------------------------------------------------------------
+#сундук в ратуше
+
+def w_tq_e1_s2(stage : Stage,utilities : Utilities, player : Player, args = [] ):
+    player.postpone_message(utilities, 'tq_e1_s2_w_text', formatparams = [player.get_hero().name], markup = m_tq_eq_s2)
+    
+
+def b_tq_e1_s2(stage : Stage, utilities : Utilities, player : Player, args = [] ):
+    buttpressed = stage.markup.find_button(player, args[0])
+    if buttpressed == button_crush_chest:
+        if player.get_hero().strength > 1:
+             player.postpone_message(utilities, 'tq_e1_s2_chest_crushed', markup = m_tq_eq_s2)
+        else:
+             player.postpone_message(utilities, 'tq_e1_s2_fail', markup = m_tq_eq_s2)
+    if buttpressed == button_pick_chest:
+        if player.get_hero().agility > 1:
+             player.postpone_message(utilities, 'tq_e1_s2_chest_picked', markup = m_tq_eq_s2)
+        else:
+             player.postpone_message(utilities, 'tq_e1_s2_fail', markup = m_tq_eq_s2)    
+    if buttpressed == button_search_chest:
+        if player.get_hero().intelligence > 1:
+             player.postpone_message(utilities, 'tq_e1_s2_chest_searched', formatparams = [player.get_hero().name],  markup = m_tq_eq_s2)
+        else:
+             player.postpone_message(utilities, 'tq_e1_s2_fail', markup = m_tq_eq_s2) 
+
+button_crush_chest = Button('b_crush_chest')
+button_pick_chest = Button('b_pick_chest')
+button_search_chest = Button('b_search_chest')
+m_tq_eq_s2 = Markup([[button_crush_chest], [button_pick_chest], [button_search_chest]])
+
+tq_e1_s2 = Stage(StageSpec.battle, 2, -1, 
+                 w_precept = w_tq_e1_s2, 
+                 b_precept = b_tq_e1_s2, 
+                 markup = m_tq_eq_s2)
+
+tq_e1 = Encounter('tq_e1', [1, 10], common, [tq_e1_s0, tq_e1_s1, tq_e1_s2])
+tutorial_journey = Journey(name = 'tutorial_journey', level = 1)
+tutorial_journey.add_encounter(tq_e1)   
