@@ -1,2 +1,4 @@
 # telegram_bot
-A simple telegram game
+A simple telegram rogue-like game.
+
+
