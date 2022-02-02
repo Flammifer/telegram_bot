@@ -33,7 +33,9 @@ def w_reg_confirm(utilities, player, args):
 
 def b_reg_confirm(utilities, player, args):
     butpresed = m_reg_confirm.find_button(player, args[0])
-    if butpresed == button_back:
+    print(args)
+    if butpresed == button_cancel:
+        print('haha')
         return Precept_return(0, 'reg')
     if butpresed == button_continue:
         _name = player.stringbuffer
@@ -115,7 +117,6 @@ s_tutorial_move_to_create_hero = State('tutorial_move_to_create_hero',
 #--------------------------------------------------------------
 button_next_hero = Button('next_hero')
 button_hire = Button('hire')
-button_cancel = Button('cancel')
 m_create_hero = Markup([[button_next_hero], [button_hire], [button_cancel]])
 
 
